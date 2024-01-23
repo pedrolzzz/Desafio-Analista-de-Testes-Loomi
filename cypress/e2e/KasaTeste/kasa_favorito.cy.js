@@ -15,19 +15,22 @@ describe('Teste Funcional Da Aba Favoritos', () => {
     it ("Busaca Uma Partida Existente e Favorita a Partida e Testa o Filtro de Partida Favorita Na Pagina", () => {
         //Busca o Time com Proxima Partida Existente 
         cy.visit(baseUrl)
-        cy.wait(5000)
-        cy.get('#filter-team').click().type(time_com_jogo)
-        cy.wait(500)
+        //Espera o Carregamento da Pagina
+        cy.intercept('https://kasalive.api.prod.loomi.com.br/api/1.0/user/favorite-matches/').as('carregamento')
+        cy.wait('@carregamento')
+        cy.get('#filter-team').click().type(time_com_jogo,{delay:100})
         cy.get('#filter-team').click().type('{enter}')
         //Clica no Primeiro Card que Contém o Time
-        cy.wait(5000)
+        cy.intercept('https://kasalive.api.prod.loomi.com.br/api/1.0/user/favorite-matches/').as('carregamento')
+        cy.wait('@carregamento')
         cy.get('.css-shtkpc').contains(time_com_jogo).first().click()
         //Favorita A Partida e Fecha o Card
         cy.get('.css-17gh0kn > [aria-label="Favoritar Partida"] > .chakra-image').click()
         cy.get('.chakra-modal__close-btn').click()
         //Visita Aba Favoritos e Checa se contem o Card com o Time selecionado
         cy.get('[data-cy="link/favoritos"] > .chakra-text').click()
-        cy.wait(5000)
+        cy.intercept('https://kasalive.api.prod.loomi.com.br/api/1.0/user/favorite-matches/').as('carregamento')
+        cy.wait('@carregamento')
         cy.get('.css-jrf8bn').contains(time_com_jogo)
         //Desativa Filro de Partida Favorita e Checa se o card não aparece mais na aba
         cy.get('[data-cy="switch-favorites"] > .chakra-switch__track').click()
@@ -44,14 +47,15 @@ describe('Teste Funcional Da Aba Favoritos', () => {
     it("Favoritar Time", () =>{
         //Abre o site e visita aba Favoritos
         cy.visit(baseUrl)
-        cy.wait(5000)
+        //Espera o Carregamento da Pagina
+        cy.intercept('https://kasalive.api.prod.loomi.com.br/api/1.0/user/favorite-matches/').as('carregamento')
+        cy.wait('@carregamento')
         cy.get('[data-cy="link/favoritos"] > .chakra-text').click()
         //Clica em Favoritar na seção Times Favoritos e Procurar pelo Time Desejado
         cy.get('[data-cy="btn-favorite-team"]').click()
-        cy.get('[data-cy="input-search-teams"]').type(time_favorito)
-        cy.wait(500)
+        cy.get('[data-cy="input-search-teams"]').type(time_favorito,{delay:50})
         //Clica em Add o Time Desejado aos Favorits e Salva 
-        cy.get('.css-or7hvt').find('button').first().click({force: true})
+        cy.get('.css-or7hvt').find('button').first().click({force : true})
         cy.get('[data-cy="btn-submit-teams"]').click()
         // Checando se o time favorito agora aparece no Times Favoritos
         cy.get('.css-1ixn91n').contains(time_favorito)
@@ -66,7 +70,9 @@ describe('Teste Funcional Da Aba Favoritos', () => {
     it("Favoritar Canal", () =>{
         //Abre o site e visita aba Favoritos
         cy.visit(baseUrl)
-        cy.wait(5000)
+        //Espera o Carregamento da Pagina
+        cy.intercept('https://kasalive.api.prod.loomi.com.br/api/1.0/user/favorite-matches/').as('carregamento')
+        cy.wait('@carregamento')
         cy.get('[data-cy="link/favoritos"] > .chakra-text').click()
         //Clica em Favoritar na seção Canais Favoritos e Procurar pelo Time Desejado
         cy.get('[data-cy="btn-favorite-channel"]').click()
