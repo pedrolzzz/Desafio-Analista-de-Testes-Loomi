@@ -1,5 +1,12 @@
 /// <reference types="cypress" />
 
+beforeEach(()=>
+{
+    Cypress.session.clearAllSavedSessions()
+})
+
+
+
 describe('Teste Funcional de Login', () => {
 
 
